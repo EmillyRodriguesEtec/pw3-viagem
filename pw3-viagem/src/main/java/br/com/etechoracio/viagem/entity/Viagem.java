@@ -32,5 +32,5 @@ public class Viagem {
     private double valorOrcamento;
 
     @Column(name = "QTD_PESSOAS")
-    private int quantidadePessoas;
+    private Integer quantidadePessoas;
 }
