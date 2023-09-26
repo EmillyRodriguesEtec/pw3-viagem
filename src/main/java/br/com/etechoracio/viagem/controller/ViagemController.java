@@ -1,5 +1,8 @@
 package br.com.etechoracio.viagem.controller;
 
+// Emilly Rodrigues da Silva
+// Henrique Nicolo Silva
+
 import br.com.etechoracio.viagem.entity.Viagem;
 import br.com.etechoracio.viagem.repository.ViagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +19,12 @@ public class ViagemController {
     private ViagemRepository repository;
 
     @GetMapping
-    public List<Viagem> buscarTodos(){
-        return repository.findAll();
+    public List<Viagem> buscarTodos(@RequestParam(required = false) String destino) //para filtrar a consulta (RequestParam)
+    {
+        if(destino == null)
+            return repository.findAll();
+        else
+            return repository.findByDestino(destino);
     }
 
     @GetMapping("/{id}")
@@ -43,7 +50,7 @@ public class ViagemController {
     public Viagem alterar(@RequestBody Long id,
                           @PathVariable Viagem obj){
 
-        Optional<Viagem> existe = buscarPorId(id);
+        Optional<Viagem> existe = repository.findById(id);
         if(existe.isPresent())
             repository.save(obj);
         return obj;
@@ -51,7 +58,7 @@ public class ViagemController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id ) { // ? ou object (mostra que não se sabe o que está
-        Optional<Viagem> existe = buscarPorId(id);                  // dentro do optional, então aceita qualquer coisa)
+        Optional<Viagem> existe = repository.findById(id);                 // dentro do optional, então aceita qualquer coisa)
         if (existe.isPresent())
         {
             repository.deleteById(id);
